@@ -4,6 +4,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Typer
 interface Project {
@@ -159,12 +160,12 @@ const ProsjektDetaljer = async ({ params }: PageProps) => {
         </div>
         
         <div className="mt-12">
-          <a 
+          <Link
             href="/prosjekter" 
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"
-          >
+            >
             ← Tilbake til prosjekter
-          </a>
+            </Link>
         </div>
       </div>
     </div>
