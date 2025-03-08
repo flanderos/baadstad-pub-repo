@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 /* import ProjectCard from '@/app/components/ProjectCard'; */
 import supabase from '@/app/lib/supabase';
 import SectionDivider from'./ui/SectionDivider';
+import Image from 'next/image';
 
 
 // TypeScript-grensesnitt for prosjekter
@@ -12,7 +13,7 @@ interface Project {
   title: string;
   description?: string;
   content?: string;
-  image?: string;
+  image_url?: string;
   slug?: string;
 }
 
@@ -86,17 +87,21 @@ const ProjectSection = () => {
             key={project.id} 
             className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <img 
-              src={project.image_url || "/placeholder.jpg"} // Fallback hvis bildet mangler
-              alt={project.title}
-              className="w-full h-40 object-cover rounded-lg mb-4"
-            />
+            <div className="relative w-full h-40 mb-4">
+              <Image 
+                src={project.image_url || "/placeholder.jpg"} // Fallback hvis bildet mangler
+                alt={project.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover rounded-lg"
+              />
+            </div>
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
               {project.title}
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-  {truncateDescription(stripHtml(project.description || project.content))}
-</p>
+              {truncateDescription(stripHtml(project.description || project.content))}
+            </p>
             <a href={`/prosjekter/${project.slug}`} className="text-blue-950 dark:text-blue-400 font-semibold hover:underline">
               Les mer →
             </a>
@@ -106,7 +111,7 @@ const ProjectSection = () => {
     </section>
     <SectionDivider /> 
     </div>
-      );
+  );
 };
 
 export default ProjectSection;

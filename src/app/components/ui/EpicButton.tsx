@@ -3,17 +3,51 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useAnimation, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowRight, FolderKanban } from 'lucide-react';
-import Link from 'next/link';
 
-const EpicButton = () => {
+// Define types for particles
+interface Particle {
+  id: string;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+  color: string;
+  rotation: number;
+  rotationSpeed: number;
+  duration: number;
+  shape: 'circle' | 'square' | 'triangle';
+}
+
+// Define types for button dimensions
+interface ButtonDimensions {
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+}
+
+// Define types for mouse position
+interface MousePosition {
+  x: number;
+  y: number;
+}
+
+const EpicButton: React.FC = () => {
   // State for mouse position and interactions
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const buttonRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const buttonControls = useAnimation();
-  const [buttonDimensions, setButtonDimensions] = useState({ width: 0, height: 0, left: 0, top: 0 });
+  const [buttonDimensions, setButtonDimensions] = useState<ButtonDimensions>({ 
+    width: 0, 
+    height: 0, 
+    left: 0, 
+    top: 0 
+  });
 
   // Motion values for advanced animations
   const mouseX = useMotionValue(0);
@@ -27,7 +61,7 @@ const EpicButton = () => {
   const glowY = useTransform(springY, [-100, 100], [-50, 50]);
   
   // Particle system
-  const [particles, setParticles] = useState([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const particleCount = 25;
   const particleColors = [
     '#3B82F6', // blue-500
@@ -51,7 +85,7 @@ const EpicButton = () => {
     return () => window.removeEventListener('resize', updateButtonDimensions);
   }, []);
 
-  const updateButtonDimensions = () => {
+  const updateButtonDimensions = (): void => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setButtonDimensions({
@@ -64,7 +98,7 @@ const EpicButton = () => {
   };
 
   // Mouse tracking for dynamic effects
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent): void => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
@@ -81,8 +115,8 @@ const EpicButton = () => {
   };
 
   // Create particle explosion effect on click
-  const createParticles = () => {
-    const newParticles = [];
+  const createParticles = (): void => {
+    const newParticles: Particle[] = [];
     
     for (let i = 0; i < particleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -91,7 +125,9 @@ const EpicButton = () => {
       const opacity = 0.5 + Math.random() * 0.5;
       const colorIndex = Math.floor(Math.random() * particleColors.length);
       const duration = 0.5 + Math.random() * 1.5;
-      const shape = Math.random() > 0.7 ? 'circle' : (Math.random() > 0.5 ? 'square' : 'triangle');
+      const shape = Math.random() > 0.7 
+        ? 'circle' 
+        : (Math.random() > 0.5 ? 'square' : 'triangle');
       
       newParticles.push({
         id: `particle-${Date.now()}-${i}`,
@@ -105,7 +141,7 @@ const EpicButton = () => {
         rotation: Math.random() * 360,
         rotationSpeed: -10 + Math.random() * 20,
         duration,
-        shape
+        shape: shape as 'circle' | 'square' | 'triangle'
       });
     }
     
@@ -157,7 +193,7 @@ const EpicButton = () => {
   };
 
   // Handle click event
-  const handleClick = () => {
+  const handleClick = (): void => {
     setIsClicked(true);
     buttonControls.start({
       scale: [1.03, 0.98, 1.03],
@@ -172,8 +208,9 @@ const EpicButton = () => {
   };
 
   // Render a particle based on its shape
-  const renderParticle = (particle) => {
-    const baseStyle = {
+  const renderParticle = (particle: Particle): React.ReactElement => {
+    const baseStyle: React.CSSProperties = {
+      position: 'absolute',
       left: particle.x,
       top: particle.y,
       width: particle.size,
@@ -189,7 +226,6 @@ const EpicButton = () => {
         return (
           <div
             key={particle.id}
-            className="absolute"
             style={baseStyle}
           />
         );
@@ -197,7 +233,6 @@ const EpicButton = () => {
         return (
           <div
             key={particle.id}
-            className="absolute"
             style={{
               ...baseStyle,
               width: 0,
@@ -214,20 +249,27 @@ const EpicButton = () => {
         return (
           <div
             key={particle.id}
-            className="absolute rounded-full"
+            className="rounded-full"
             style={baseStyle}
           />
         );
     }
   };
 
+  // For animations that rely on spring values
+  const rotateX = useTransform(springY, [-100, 100], [5, -5]);
+  const rotateY = useTransform(springX, [-100, 100], [-5, 5]);
+  const translateZ = useTransform(springX, [-100, 100], [0, 0]);
+  const translateX = useTransform(springX, [-100, 100], [-2, 2]);
+  const translateY = useTransform(springY, [-100, 100], [-2, 2]);
+
   return (
     <div 
-      className="relative inline-block perspective-1000"
+      className="relative inline-block"
       style={{ 
         opacity: isVisible ? 1 : 0, 
         transition: 'opacity 0.5s ease',
-        transformStyle: 'preserve-3d'
+        perspective: '1000px'
       }}
     >
       {/* Ambient glow that follows mouse */}
@@ -250,35 +292,59 @@ const EpicButton = () => {
         variants={buttonVariants}
         style={{
           transformStyle: 'preserve-3d',
-          transform: isHovered 
-            ? `perspective(1000px) rotateX(${(mouseY.get() / 10)}deg) rotateY(${-(mouseX.get() / 15)}deg)` 
-            : 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-          transition: isHovered ? 'none' : 'transform 0.5s ease'
         }}
       >
-        {/* Pulsing border */}
-        <div className="absolute -inset-[2px] rounded-lg overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" style={{
-            backgroundSize: '200% 100%',
-            animation: isHovered ? 'moveGradient 3s linear infinite' : 'none'
-          }}></div>
-        </div>
-        
-        {/* Amazing light beam effect */}
-        <div className="absolute inset-0 rounded-lg overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-white/60 to-blue-600/0" style={{
-            width: '150%',
-            left: '-25%',
-            transform: `translateX(${isHovered ? '100%' : '-100%'})`,
-            transition: 'transform 1.5s ease',
-            animation: isHovered ? 'pulseLight 3s ease-in-out infinite' : 'none',
-            mixBlendMode: 'overlay'
-          }}></div>
-        </div>
-        
-        {/* Button content */}
-        <Link href="/prosjekter">
-          <motion.button
+        {/* Button with hover container */}
+        <motion.div
+          style={{
+            transformStyle: 'preserve-3d',
+            rotateX: isHovered ? rotateX : 0,
+            rotateY: isHovered ? rotateY : 0,
+            transition: isHovered ? 'none' : 'transform 0.5s ease'
+          }}
+        >
+          {/* Pulsing border */}
+          <div className="absolute -inset-[2px] rounded-lg overflow-hidden">
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
+              animate={isHovered ? {
+                backgroundPosition: ['0% 0%', '100% 0%', '0% 0%']
+              } : {}}
+              transition={isHovered ? {
+                duration: 3,
+                repeat: Infinity,
+                repeatType: 'loop',
+                ease: 'linear'
+              } : {}}
+              style={{
+                backgroundSize: '200% 100%',
+              }}
+            />
+          </div>
+          
+          {/* Amazing light beam effect */}
+          <div className="absolute inset-0 rounded-lg overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-white/60 to-blue-600/0"
+              animate={isHovered ? {
+                x: ['-100%', '100%']
+              } : {}}
+              transition={isHovered ? {
+                duration: 3,
+                repeat: Infinity,
+                repeatType: 'loop',
+                ease: 'easeInOut'
+              } : {}}
+              style={{
+                width: '150%',
+                left: '-25%',
+                mixBlendMode: 'overlay'
+              }}
+            />
+          </div>
+          
+          {/* Button content */}
+          <motion.button 
             ref={buttonRef}
             className="relative z-10 bg-blue-600 text-white font-medium py-3 px-8 rounded-lg overflow-hidden flex items-center gap-2 cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
@@ -292,15 +358,14 @@ const EpicButton = () => {
             {/* Subtle inner shadow on press */}
             <div className={`absolute inset-0 bg-black/20 opacity-0 transition-opacity pointer-events-none ${isClicked ? 'opacity-20' : ''}`}></div>
             
-            {/* Fjernet dot grid texture */}
-            
             {/* Content with animated position */}
             <motion.div 
               className="flex items-center gap-2"
-              style={{ 
-                transform: isHovered 
-                  ? `translateZ(10px) translateX(${mouseX.get() / 50}px) translateY(${mouseY.get() / 50}px)` 
-                  : 'translateZ(0)',
+              style={{
+                transformStyle: 'preserve-3d',
+                z: translateZ,
+                x: isHovered ? translateX : 0,
+                y: isHovered ? translateY : 0,
                 transition: isHovered ? 'none' : 'transform 0.5s ease'
               }}
             >
@@ -319,7 +384,7 @@ const EpicButton = () => {
               </motion.div>
             </motion.div>
           </motion.button>
-        </Link>
+        </motion.div>
       </motion.div>
       
       {/* Particles container - expanded boundaries for better effect */}
@@ -327,22 +392,10 @@ const EpicButton = () => {
         {particles.map(particle => renderParticle(particle))}
       </div>
       
-      {/* Global CSS for animations */}
-      <style jsx global>{`
-        @keyframes moveGradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes pulseLight {
-          0% { opacity: 0.2; transform: translateX(-100%); }
-          50% { opacity: 0.6; transform: translateX(50%); }
-          100% { opacity: 0.2; transform: translateX(100%); }
-        }
-      `}</style>
+      {/* Vi fjerner Link-komponenten her siden den allerede er wrappet utenfor */}
     </div>
   );
 };
 
+// Sørg for at filnavn endres til EpicButton.tsx for TypeScript-støtte
 export default EpicButton;
