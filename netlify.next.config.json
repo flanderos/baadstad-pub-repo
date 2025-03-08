@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "next",
+  "ignoreCommands": ["type-check", "lint"],
+  "nodeVersion": "18"
+}
