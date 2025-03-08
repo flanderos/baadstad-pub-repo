@@ -16,18 +16,15 @@ interface Project {
   slug?: string;
 }
 
-// Endrer type-definisjonen til å matche det Next.js 15 forventer
-type PageProps = {
-  params: {
-    slug: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
+// Her bruker vi en eksportert type direkte, uten våre egne grensesnitt
+export type Props = {
+  params: { slug: string };
+  searchParams?: Record<string, string | string[]>;
 };
 
 // Generer metadata dynamisk basert på prosjektdata
-export async function generateMetadata(
-  { params }: PageProps
-): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { params } = props;
   console.log('⭐ generateMetadata starter - slug:', params.slug);
   const project = await getProject(params.slug);
   
@@ -45,33 +42,25 @@ export async function generateMetadata(
   };
 }
 
-// Felles funksjon for å hente prosjekt (enten via slug eller ID)
+// Felles funksjon for å hente prosjekt
 async function getProject(slugOrId: string): Promise<Project | null> {
   console.log('🔍 getProject starter - søker etter:', slugOrId);
   
   try {
-    // Oppretter Supabase-klienten for serverkomponenter
-    console.log('🔄 Oppretter supabase-klient...');
     const supabase = createServerComponentClient({ cookies });
-    console.log('✅ Supabase-klient opprettet');
     
     // Først, prøv å søke etter slug
-    console.log('🔄 Søker først etter prosjekt med slug =', slugOrId);
     let { data, error } = await supabase
       .from('projects')
       .select('*')
       .eq('slug', slugOrId)
       .single();
-    
-    console.log('📊 Slug-søkeresultat:', { dataFunnet: !!data, error: error?.message });
       
-    // Hvis ikke funnet via slug, sjekk om det er en UUID og søk med ID
+    // Hvis ikke funnet via slug, sjekk om det er en UUID
     if (error) {
       const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(slugOrId);
-      console.log('🔄 Slug ikke funnet, er det en UUID?', isUuid);
       
       if (isUuid) {
-        console.log('🔄 Prøver å søke med ID =', slugOrId);
         const result = await supabase
           .from('projects')
           .select('*')
@@ -80,20 +69,7 @@ async function getProject(slugOrId: string): Promise<Project | null> {
         
         data = result.data;
         error = result.error;
-        console.log('📊 ID-søkeresultat:', { dataFunnet: !!data, error: error?.message });
       }
-    }
-    
-    // Prøv en tredje metode: søk i alle prosjekter for debugging
-    if (error) {
-      console.log('🔄 Siste forsøk: Henter alle prosjekter for å sjekke...');
-      const { data: allProjects, error: listError } = await supabase
-        .from('projects')
-        .select('id, title, slug')
-        .limit(10);
-      
-      console.log('📋 Alle prosjekter (opptil 10):', allProjects);
-      console.log('📋 Listingsfeil:', listError?.message);
     }
     
     if (error) {
@@ -101,34 +77,25 @@ async function getProject(slugOrId: string): Promise<Project | null> {
       return null;
     }
     
-    console.log('✅ Prosjekt funnet:', data?.title);
     return data as Project;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Ukjent feil';
-    console.error('❌ Exception i getProject:', errorMessage);
-    // Dump stack trace for å finne hvor feilen oppstår
-    console.error('📚 Stack trace:', new Error().stack);
+    console.error('❌ Exception i getProject:', error);
     return null;
   }
 }
 
-// Endrer komponentdefinisjonen til en async function for å matche Next.js 15 sin forventing
-const ProsjektDetaljer = async ({ params }: PageProps) => {
+// Denne funksjonen mottar props direkte fra Next.js
+// Vi bruker ikke vårt eget page props interface
+export default async function ProsjektDetaljer(props: Props) {
+  const { params } = props;
   console.log('🚀 ProsjektDetaljer starter - slug:', params.slug);
   const project = await getProject(params.slug);
   
-  // Hvis ikke funnet, vis 404-side
   if (!project) {
-    console.log('❌ Prosjekt ikke funnet, viser 404-side');
     notFound();
   }
   
-  console.log('✅ Rendering prosjekt:', project.title);
-  
-  // Formater HTML-innhold for visning hvis det finnes
   const contentHtml = project.content || project.description || '';
-  
-  console.log('📝 Innholdstype:', contentHtml.startsWith('<') ? 'HTML' : 'Ren tekst');
   
   return (
     <div className="container mx-auto px-4 py-12">
@@ -148,15 +115,12 @@ const ProsjektDetaljer = async ({ params }: PageProps) => {
         )}
         
         {!project.image && (
-          <div className="relative h-80 w-full bg-gray-200 mb-8">
-            <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
-              <span className="text-gray-500">Bilde ikke tilgjengelig</span>
-            </div>
+          <div className="h-80 w-full bg-gray-200 mb-8 flex items-center justify-center">
+            <span className="text-gray-500">Bilde ikke tilgjengelig</span>
           </div>
         )}
         
         <div className="prose max-w-none">
-          {/* Hvis innholdet er HTML, viser vi det som HTML */}
           {contentHtml.startsWith('<') ? (
             <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
           ) : (
@@ -175,6 +139,4 @@ const ProsjektDetaljer = async ({ params }: PageProps) => {
       </div>
     </div>
   );
-};
-
-export default ProsjektDetaljer;
+}
