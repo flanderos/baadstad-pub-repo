@@ -16,14 +16,18 @@ interface Project {
   slug?: string;
 }
 
-interface PageProps {
+// Endrer type-definisjonen til å matche det Next.js 15 forventer
+type PageProps = {
   params: {
     slug: string;
   };
-}
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 // Generer metadata dynamisk basert på prosjektdata
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: PageProps
+): Promise<Metadata> {
   console.log('⭐ generateMetadata starter - slug:', params.slug);
   const project = await getProject(params.slug);
   
@@ -108,6 +112,7 @@ async function getProject(slugOrId: string): Promise<Project | null> {
   }
 }
 
+// Endrer komponentdefinisjonen til en async function for å matche Next.js 15 sin forventing
 const ProsjektDetaljer = async ({ params }: PageProps) => {
   console.log('🚀 ProsjektDetaljer starter - slug:', params.slug);
   const project = await getProject(params.slug);
