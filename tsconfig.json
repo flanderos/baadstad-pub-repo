@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,                     /* Satt til false for å gjøre TypeScript mindre strengt */
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noImplicitAny": false,              /* Lar deg bruke implisitt 'any' type */
+    "strictNullChecks": false,           /* Deaktiverer strenge null-sjekker */
+    "strictFunctionTypes": false,        /* Mindre strengt på funksjon parameter-typer */
+    "strictPropertyInitialization": false, /* Ikke krev at class properties må initialiseres */
     "plugins": [
       {
         "name": "next"

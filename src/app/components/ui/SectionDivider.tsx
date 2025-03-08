@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const SectionDivider = () => {
-  const dividerRef = useRef(null);
+  const dividerRef = useRef<HTMLDivElement | null>(null);
   
   // Parallax effekt når brukeren scroller
   useEffect(() => {
@@ -13,9 +13,11 @@ const SectionDivider = () => {
       const scrollY = window.scrollY;
       const dividerTop = dividerRef.current.getBoundingClientRect().top + scrollY;
       const offset = (scrollY - dividerTop) * 0.1;
-      
-      if (dividerRef.current.querySelector('.wave-path')) {
-        dividerRef.current.querySelector('.wave-path').style.transform = `translateY(${offset}px)`;
+
+      // Løsning: Bruk optional chaining og en type asserting
+      const wavePath = dividerRef.current.querySelector('.wave-path') as HTMLElement | null;
+      if (wavePath) {
+        wavePath.style.transform = `translateY(${offset}px)`;
       }
     };
     
