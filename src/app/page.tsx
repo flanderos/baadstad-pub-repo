@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { ArrowDown, ArrowRight, FolderKanban, User  } from 'lucide-react';
+import { ArrowDown,  User  } from 'lucide-react';
 import Link from 'next/link';
 import EpicButton from './components/ui/EpicButton';
 
@@ -16,7 +16,7 @@ import FinalSection from './components/FinalSection';
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const heroRef = useRef(null);
-  const isInView = useInView(heroRef, { once: false });
+
   
   // Parallax-effekt for bakgrunnen
   const { scrollYProgress } = useScroll();
@@ -191,8 +191,12 @@ export default function Home() {
   );
 }
 
+type ScrollRevealProps = {
+  children: React.ReactNode;
+};
+
 // Hjelpefunksjon for å animere seksjoner ved scrolling
-const ScrollReveal = ({ children }) => {
+const ScrollReveal: React.FC<ScrollRevealProps> = ({ children }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
   
