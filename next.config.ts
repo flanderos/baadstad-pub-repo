@@ -1,17 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify er fjernet da det ikke lenger støttes/er nødvendig i Next.js 15
   images: {
     domains: ['mbqaonctumdtvbnoclzp.supabase.co'],
-    // Eventuelt kan du også bruke remotePatterns for mer spesifikk kontroll
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'mbqaonctumdtvbnoclzp.supabase.co',
-    //     pathname: '/storage/v1/object/public/**',
-    //   },
-    // ],
   },
 }
 
