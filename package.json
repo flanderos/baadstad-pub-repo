@@ -21,7 +21,8 @@
     "next": "15.2.1",
     "npm": "^11.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "resend": "^4.1.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -29,10 +30,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "cross-env": "^7.0.3"
+    "typescript": "^5"
   }
 }
