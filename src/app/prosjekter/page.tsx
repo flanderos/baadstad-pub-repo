@@ -10,7 +10,7 @@ interface Project {
   title: string;
   description: string;
   content?: string;
-  image?: string;
+  image_url?: string;
   company_id?: string;
   created_at?: string;
   slug?: string; // Lagt til støtte for slug
@@ -119,7 +119,7 @@ const ProsjekterPage = () => {
     id: project.id,
     title: project.title,
     description: truncateDescription(stripHtml(project.content || project.description || "")),
-    image: project.image,
+    image: project.image_url,
     slug: project.slug || generateSlug(project.title, project.id) // Bruker eksisterende slug eller genererer en
   }));
 

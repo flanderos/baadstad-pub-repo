@@ -1,10 +1,10 @@
-import React from 'react';
+// Fil: src/app/prosjekter/[slug]/page.tsx
+// Dette er server-komponenten for prosjektsiden
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
+import ClientProjectDetails from './ClientProjectDetails';
 
 // Typer
 interface Project {
@@ -12,11 +12,27 @@ interface Project {
   title: string;
   description: string;
   content?: string;
-  image?: string;
+  image_url?: string;
   slug?: string;
+  created_at?: string;
+  updated_at?: string;
+  location?: string;
+  client_type?: string;
+  project_type?: string;
+  completion_date?: string;
+  features?: string[];
 }
 
-// Her bruker vi en eksportert type direkte, uten våre egne grensesnitt
+interface GalleryImage {
+  id: string;
+  project_id: string;
+  image_url: string;
+  image_type: 'gallery' | 'before' | 'after';
+  sort_order: number;
+  bucket_name: string;
+}
+
+// Her bruker vi en eksportert type direkte
 export type Props = {
   params: { slug: string };
   searchParams?: Record<string, string | string[]>;
@@ -37,8 +53,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   
   console.log('⭐ generateMetadata - prosjekt funnet:', project.title);
   return {
-    title: `${project.title} | Min Nettside`,
+    title: `${project.title} | Rørleggermester Prosjekter`,
     description: project.description || project.content?.substring(0, 160) || '',
+    openGraph: {
+      title: project.title,
+      description: project.description || '',
+      images: project.image_url ? [{ url: project.image_url }] : [],
+    },
   };
 }
 
@@ -84,59 +105,48 @@ async function getProject(slugOrId: string): Promise<Project | null> {
   }
 }
 
-// Denne funksjonen mottar props direkte fra Next.js
-// Vi bruker ikke vårt eget page props interface
-export default async function ProsjektDetaljer(props: Props) {
+// Funksjon for å hente galleribilder
+async function getProjectImages(projectId: string): Promise<GalleryImage[]> {
+  try {
+    const supabase = createServerComponentClient({ cookies });
+    
+    const { data, error } = await supabase
+      .from('project_images')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('sort_order', { ascending: true });
+      
+    if (error) {
+      console.error('❌ Feil ved henting av bilder:', error);
+      return [];
+    }
+    
+    return data as GalleryImage[];
+  } catch (error) {
+    console.error('❌ Exception i getProjectImages:', error);
+    return [];
+  }
+}
+
+// Server-side komponent som rendrer klient-komponenten
+export default async function ProsjektDetaljerPage(props: Props) {
   const { params } = props;
-  console.log('🚀 ProsjektDetaljer starter - slug:', params.slug);
   const project = await getProject(params.slug);
   
   if (!project) {
     notFound();
   }
   
-  const contentHtml = project.content || project.description || '';
+  // Hent galleribilder
+  const galleryImages = await getProjectImages(project.id);
   
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6">{project.title}</h1>
-        
-        {project.image && (
-          <div className="relative h-80 w-full bg-gray-200 mb-8">
-            <Image 
-              src={project.image} 
-              alt={project.title} 
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-            />
-          </div>
-        )}
-        
-        {!project.image && (
-          <div className="h-80 w-full bg-gray-200 mb-8 flex items-center justify-center">
-            <span className="text-gray-500">Bilde ikke tilgjengelig</span>
-          </div>
-        )}
-        
-        <div className="prose max-w-none">
-          {contentHtml.startsWith('<') ? (
-            <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
-          ) : (
-            <p className="text-lg">{contentHtml}</p>
-          )}
-        </div>
-        
-        <div className="mt-12">
-          <Link
-            href="/prosjekter" 
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"
-            >
-            ← Tilbake til prosjekter
-            </Link>
-        </div>
-      </div>
-    </div>
-  );
+  // Organiser bildene etter type
+  const organizedImages = {
+    gallery: galleryImages.filter(img => img.image_type === 'gallery'),
+    before: galleryImages.filter(img => img.image_type === 'before'),
+    after: galleryImages.filter(img => img.image_type === 'after')
+  };
+  
+  // Sammenstill all data og send til klientkomponenten
+  return <ClientProjectDetails project={project} galleryImages={organizedImages} />;
 }
