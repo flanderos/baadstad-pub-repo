@@ -9,57 +9,55 @@ interface FormData {
   message: string;
 }
 
-
 const ContactForm: React.FC = () => {
-  // Tilstanden med typedefinisjon
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
-  
-  // Håndterer endring i inputfelt med typede event-parameter
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
-  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitSuccess(false);
     setSubmitError('');
-    
+
     try {
-      // Her kan du implementere integrasjon med Supabase senere
-      // For nå simulerer vi bare en vellykket innsending
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log('Form submitted:', formData);
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+      const response = await fetch('/api/supabase/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitSuccess(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        throw new Error(result.error || 'Noe gikk galt');
+      }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setSubmitError('Det oppsto en feil ved innsending av skjemaet. Vennligst prøv igjen.');
+      console.error('Feil:', error);
+      setSubmitError('Det oppsto en feil ved innsending av skjemaet. Prøv igjen.');
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {submitSuccess && (
@@ -67,13 +65,13 @@ const ContactForm: React.FC = () => {
           Takk for din henvendelse! Vi vil kontakte deg så snart som mulig.
         </div>
       )}
-      
+
       {submitError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           {submitError}
         </div>
       )}
-      
+
       <div>
         <label htmlFor="name" className="block mb-1 font-medium">Navn</label>
         <input
@@ -86,7 +84,7 @@ const ContactForm: React.FC = () => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      
+
       <div>
         <label htmlFor="email" className="block mb-1 font-medium">E-post</label>
         <input
@@ -99,7 +97,7 @@ const ContactForm: React.FC = () => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      
+
       <div>
         <label htmlFor="subject" className="block mb-1 font-medium">Emne</label>
         <input
@@ -112,7 +110,7 @@ const ContactForm: React.FC = () => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      
+
       <div>
         <label htmlFor="message" className="block mb-1 font-medium">Melding</label>
         <textarea
@@ -125,7 +123,7 @@ const ContactForm: React.FC = () => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         ></textarea>
       </div>
-      
+
       <button
         type="submit"
         disabled={isSubmitting}

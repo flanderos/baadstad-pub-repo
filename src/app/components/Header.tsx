@@ -13,6 +13,10 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  const isLandingPage = pathname === "/";
+
+
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -60,11 +64,13 @@ const Header = () => {
   ];
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white text-gray-800 shadow-lg py-2' 
-          : 'bg-transparent text-white py-4'
+        isLandingPage
+          ? scrolled
+            ? "bg-white text-gray-800 shadow-lg py-2"
+            : "bg-transparent text-white py-4"
+          : "bg-gray-800 text-white shadow-lg py-4"
       }`}
       aria-label="Hovednavigasjon"
     >

@@ -52,7 +52,8 @@ const Footer: React.FC = () => {
     { name: 'Tjenester', path: '/' },
     { name: 'Prosjekter', path: '/prosjekter' },
     { name: 'Om oss', path: '/om-oss' },
-    { name: 'Kontakt', path: '/kontakt' }
+    { name: 'Kontakt', path: '/kontakt' },
+    { name: 'Logg inn', path: 'https://www.webfront.no/admin' }
   ];
   
   // Sosiale medier lenker med ikoner
