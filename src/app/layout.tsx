@@ -12,8 +12,8 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'], 
 const montserrat = Montserrat({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-montserrat',preload: true });
 
 export const metadata: Metadata = {
-  title: 'Min Nettside',
-  description: 'Min personlige nettside bygget med Next.js og Tailwind CSS',
+  title: 'Bådstad AS',
+  description: 'Profesjonelle rørleggertjenester i Innlandet som du kan stole på! Rørlegger tilbyr rask respons, effektive løsninger og utmerket kvalitet på alle typer reparasjoner og installasjoner',
 };
 
 interface RootLayoutProps {

@@ -68,7 +68,7 @@ const Header = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isLandingPage
           ? scrolled
-            ? "bg-white text-gray-800 shadow-lg py-2"
+            ? "bg-gray-900 text-white shadow-lg py-2"
             : "bg-transparent text-white py-4"
           : "bg-gray-800 text-white shadow-lg py-4"
       }`}

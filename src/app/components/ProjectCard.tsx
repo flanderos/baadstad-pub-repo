@@ -81,7 +81,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
         <div className="flex justify-between items-center">
           <Link 
             href={projectUrl}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+            className="inline-flex items-center px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors duration-200"
           >
             Se detaljer
             <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
