@@ -328,7 +328,7 @@ const Footer: React.FC = () => {
           
         </motion.div>
         <p className="mt-2 text-gray-400 flex flex-row justify-end">
-              Designet og utviklet av <a href="https://webfront.no" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors duration-300 font-medium z-50">WebFront</a>
+              Utviklet og levert av <a href="https://webfront.no" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors duration-300 font-medium z-50 ml-1.5">WebFront</a>
           </p>
       </div>
     </footer>
