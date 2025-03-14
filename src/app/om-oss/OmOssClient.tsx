@@ -15,7 +15,7 @@ const teamMembers: TeamMember[] = [
     name: 'Kent Erik Bådstad',
     title: 'Daglig Leder',
     description: 'Grunnlegger og daglig leder med over 15 års erfaring innen baderomsrenovering. Kent Erik sikrer at alle prosjekter gjennomføres med høyeste kvalitet og kundetilfredshet.',
-    image: "/images/mps.webp"
+    image: "/images/baadstad4.webp"
   }
 ];
 

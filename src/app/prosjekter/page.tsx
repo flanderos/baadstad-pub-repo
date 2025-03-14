@@ -20,7 +20,7 @@ const ProsjekterPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [animationReady, setAnimationReady] = useState<boolean>(true);
+
 
   useEffect(() => {
     // Funksjon for å hente prosjekter
@@ -54,7 +54,7 @@ const ProsjekterPage = () => {
       } finally {
         setLoading(false);
         // Kort forsinkelse før animasjonene starter, så alt er klart
-        setTimeout(() => setAnimationReady(true), 100);
+        
       }
     }
 
