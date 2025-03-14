@@ -89,14 +89,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 mix-blend-multiply z-0"></div>
         <div className="absolute inset-0 bg-blue-950/20 mix-blend-color z-0"></div>
         
-        {/* Subtil texture overlay */}
-        <div className="absolute inset-0 opacity-10 z-0" 
-          style={{ 
-            backgroundImage: 'url(/images/noise-texture.png)', 
-            backgroundRepeat: 'repeat'
-          }}
-        ></div>
-        
         {/* Innhold med staggered animasjon */}
         <div className="flex justify-center container w-full mx-auto px-4 relative z-10">
           <motion.div
