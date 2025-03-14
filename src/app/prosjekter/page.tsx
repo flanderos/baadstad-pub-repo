@@ -20,14 +20,14 @@ const ProsjekterPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [animationReady, setAnimationReady] = useState<boolean>(true);
+
 
   useEffect(() => {
     // Funksjon for å hente prosjekter
     async function fetchProjects() {
       try {
         setLoading(true);
-        console.log("🔄 Starter henting av prosjekter...");
+      
         
         // Hent miljøvariabel for company_id
         const companyId = process.env.NEXT_PUBLIC_COMPANY_ID;
@@ -45,7 +45,7 @@ const ProsjekterPage = () => {
           return;
         }
         
-        console.log("📂 Mottatt prosjekter:", data);
+        
         setProjects(data || []);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Ukjent feil oppsto';
@@ -54,7 +54,7 @@ const ProsjekterPage = () => {
       } finally {
         setLoading(false);
         // Kort forsinkelse før animasjonene starter, så alt er klart
-        setTimeout(() => setAnimationReady(true), 100);
+        
       }
     }
 

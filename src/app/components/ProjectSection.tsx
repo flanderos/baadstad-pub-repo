@@ -34,7 +34,7 @@ const ProjectSection = () => {
           return;
         }
     
-        console.log("🔍 Henter prosjekter for company_id:", companyId);
+    
         
         const { data, error, status } = await supabase
           .from("projects")
@@ -48,7 +48,7 @@ const ProjectSection = () => {
           throw error;
         }
     
-        console.log("✅ Prosjekter hentet:", data);
+       
         setProjects(data || []);
       } catch (error) {
         setError(error instanceof Error ? error.message : "Ukjent feil oppsto");
