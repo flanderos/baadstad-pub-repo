@@ -379,7 +379,7 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           )}
           
           {/* CTA Boks */}
-          <div className="bg-blue-600 dark:bg-blue-700 rounded-xl shadow-lg p-6 md:p-8 text-white mb-12">
+          <div className="bg-blue-950 dark:bg-blue-700 rounded-xl shadow-lg p-6 md:p-8 text-white mb-12">
             <div className="flex flex-col md:flex-row md:items-center justify-between">
               <div className="mb-6 md:mb-0">
                 <h3 className="text-2xl font-bold mb-2">Ønsker du et lignende prosjekt?</h3>
@@ -388,13 +388,13 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
               <div className="flex flex-wrap gap-4">
                 <a 
                   href="/kontakt" 
-                  className="inline-block px-6 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-md"
+                  className="inline-block px-6 py-3 bg-white text-blue-950 font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-md"
                 >
                   Kontakt oss
                 </a>
                 <a 
                   href="tel:+4712345678" 
-                  className="inline-flex items-center px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg transition-colors shadow-md"
+                  className="inline-flex items-center px-6 py-3 bg-white hover:bg-blue-50 text-blue-950 font-bold rounded-lg transition-colors shadow-md"
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />

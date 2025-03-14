@@ -34,7 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
   const projectUrl = `/prosjekter/${project.slug || generateSlug(project.title, project.id)}`;
   
   return (
-    <div className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+    <div className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div className="relative h-52 w-full overflow-hidden">
         {project.image ? (
           <Image
@@ -70,7 +70,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
           </div>
         )}
         
-        <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className="text-xl font-bold mb-2 text-blue-950 dark:text-white transition-colors">
           {project.title}
         </h3>
         
@@ -81,7 +81,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
         <div className="flex justify-between items-center">
           <Link 
             href={projectUrl}
-            className="inline-flex items-center px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors duration-200"
+            className="inline-flex items-center px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white font-medium rounded-lg transition-colors duration-200"
           >
             Se detaljer
             <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
