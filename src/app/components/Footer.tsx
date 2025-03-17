@@ -76,8 +76,9 @@ const Footer: React.FC = () => {
   const contactInfo = [
     { text: 'Kvennhusvegen 21', icon: <MapPin size={18} /> },
     { text: '2820 Nordre Toten', icon: <Building size={18} /> },
-    { text: 'post@baadstad.no', icon: <Mail size={18} /> },
-    { text: '+91 14 49 19', icon: <Phone size={18} /> }
+    { text: <a href="mailto:post@baadstad.no" className="hover:text-white transition-colors">post@baadstad.no</a>, icon: <Mail size={18} /> },
+    { text: <a href="tel:+91144919" className="hover:text-white transition-colors">+91 14 49 19</a>, icon: <Phone size={18} /> }
+
   ];
 
   // Nyhetsbrev form håndtering
