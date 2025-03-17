@@ -11,7 +11,7 @@ const AboutSection = () => {
       <div className="absolute top-20 left-10 w-32 h-32 bg-blue-100 rounded-full opacity-30 blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-100 rounded-full opacity-30 blur-3xl"></div>
       
-      <section className="relative min-h-screen flex flex-col justify-center items-center bg-white text-black px-6 py-20 overflow-hidden">
+      <section className="relative min-h-fit flex flex-col justify-center items-center bg-white text-black px-6 py-20 overflow-hidden">
         {/* Subtil bakgrunnstekstur */}
         <div 
           className="absolute inset-0 opacity-5 pointer-events-none"
@@ -84,7 +84,7 @@ const AboutSection = () => {
 
         {/* Knapp med kul animasjon */}
         <motion.button 
-          className="relative mt-12 px-8 py-4 bg-blue-950 text-white font-semibold rounded-lg shadow-lg overflow-hidden group"
+          className="relative mt-12 px-8 py-4 bg-blue-950 text-white font-semibold rounded-lg shadow-lg overflow-hidden group hover:cursor-pointer"
           whileHover="hover"
           whileTap={{ scale: 0.98 }}
         >
