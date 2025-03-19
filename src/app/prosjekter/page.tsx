@@ -21,14 +21,21 @@ const ProsjekterPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [animationsReady, setAnimationsReady] = useState<boolean>(false);
-
+  const [isSafari, setIsSafari] = useState<boolean>(false);
 
   useEffect(() => {
+    // Sjekk om det er Safari
+    const checkSafari = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+    };
+    
+    setIsSafari(checkSafari());
+
     // Funksjon for å hente prosjekter
     async function fetchProjects() {
       try {
         setLoading(true);
-      
         
         // Hent miljøvariabel for company_id
         const companyId = process.env.NEXT_PUBLIC_COMPANY_ID;
@@ -45,7 +52,6 @@ const ProsjekterPage = () => {
           setError(error.message);
           return;
         }
-        
         
         setProjects(data || []);
       } catch (error) {
@@ -109,7 +115,7 @@ const ProsjekterPage = () => {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
         <div className="loading-spinner"></div>
-        <p className="mt-4 text-blue-950 animate-pulse">Laster prosjekter...</p>
+        <p className="mt-4" style={{ color: '#1e3a8a' }}>Laster prosjekter...</p>
       </div>
     );
   }
@@ -117,9 +123,18 @@ const ProsjekterPage = () => {
   // Viser feilmelding med animasjon
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-12 text-blue-950 animate-fade-in">
-        <h1 className="text-4xl font-bold mb-6 text-blue-950 animate-slide-down">Våre prosjekter</h1>
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded animate-shake">
+      <div className="container mx-auto px-4 py-12" style={{ color: '#1e3a8a' }}>
+        <h1 className="text-4xl font-bold mb-6" style={{ color: '#1e3a8a', opacity: 1 }}>
+          Våre prosjekter
+        </h1>
+        <div style={{ 
+          backgroundColor: '#fee2e2', 
+          border: '1px solid #f87171', 
+          color: '#b91c1c',
+          padding: '0.75rem 1rem',
+          borderRadius: '0.375rem',
+          animation: 'shake 0.8s ease-out'
+        }}>
           <p>Det oppsto en feil ved henting av prosjekter: {error}</p>
         </div>
       </div>
@@ -129,9 +144,11 @@ const ProsjekterPage = () => {
   // Viser melding hvis ingen prosjekter
   if (!projects || projects.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-12 animate-fade-in">
-        <h1 className="text-4xl font-bold mb-6 text-blue-950 animate-slide-down">Våre prosjekter</h1>
-        <p className="animate-fade-in-delay">Ingen prosjekter funnet.</p>
+      <div className="container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold mb-6" style={{ color: '#1e3a8a', opacity: 1 }}>
+          Våre prosjekter
+        </h1>
+        <p>Ingen prosjekter funnet.</p>
       </div>
     );
   }
@@ -147,11 +164,32 @@ const ProsjekterPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 mt-16 content-ready">
-      <h1 className={`text-4xl font-bold mb-6 text-blue-950 ${animationsReady ? 'animate-header' : 'opacity-0'}`}>
+      <h1 
+        className={`text-4xl font-bold mb-6 ${animationsReady ? 'animate-header' : ''}`} 
+        style={{ 
+          color: '#1e3a8a', 
+          opacity: animationsReady ? 1 : 0
+        }}
+      >
         Våre prosjekter
       </h1>
-      <div className={`w-24 h-1 bg-blue-400 mb-8 ${animationsReady ? 'animate-line' : 'opacity-0'}`}></div>
-      <p className={`text-lg mb-8 ${animationsReady ? 'animate-text' : 'opacity-0'}`}>
+      
+      <div 
+        className={`w-24 h-1 mb-8 ${animationsReady ? 'animate-line' : ''}`}
+        style={{ 
+          backgroundColor: '#60a5fa', 
+          opacity: animationsReady ? 1 : 0,
+          width: animationsReady ? '6rem' : 0
+        }}
+      ></div>
+      
+      <p 
+        className={`text-lg mb-8 ${animationsReady ? 'animate-text' : ''}`}
+        style={{ 
+          opacity: animationsReady ? 1 : 0,
+          color: '#1f2937'
+        }}
+      >
         Her er noen av prosjektene vi har jobbet med.
       </p>
       
@@ -159,8 +197,13 @@ const ProsjekterPage = () => {
         {formattedProjects.map((project, index) => (
           <div 
             key={project.id} 
-            className="project-card opacity-0 transform translate-y-8"
-            style={{ animationDelay: `${index * 20}ms` }}
+            className="project-card"
+            style={{ 
+              opacity: 0,
+              transform: 'translateY(10px)',
+              transition: 'opacity 0.25s ease-out, transform 0.25s ease-out',
+              transitionDelay: `${index * 20}ms`
+            }}
           >
             <ProjectCard project={project} />
           </div>
@@ -233,25 +276,44 @@ const ProsjekterPage = () => {
         }
         
         /* Prosjektkort animasjoner - superkjapp */
-        .project-card {
-          opacity: 0;
-          transform: translateY(10px);
-          transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-        }
-        
         .card-visible {
-          opacity: 1;
-          transform: translateY(0);
+          opacity: 1 !important;
+          transform: translateY(0) !important;
         }
         
-        /* Forsinkede animasjoner */
-        .animate-fade-in-delay {
-          animation: fadeIn 0.8s ease-out 0.2s forwards;
-        }
-        
-        /* Generell fade-in */
-        .animate-fade-in {
-          animation: fadeIn 0.8s ease-out forwards;
+        /* Safari-spesifikke stiler */
+        @supports (-webkit-touch-callout: none) {
+          .text-blue-950 {
+            color: #1e3a8a !important;
+          }
+          
+          .bg-blue-400 {
+            background-color: #60a5fa !important;
+          }
+          
+          /* Forsikre oss om at animasjoner fungerer korrekt i Safari */
+          @keyframes lineExpand {
+            from { width: 0; }
+            to { width: 6rem; }
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          @keyframes slideDown {
+            from { 
+              -webkit-transform: translateY(-20px); 
+              transform: translateY(-20px); 
+              opacity: 0; 
+            }
+            to { 
+              -webkit-transform: translateY(0); 
+              transform: translateY(0); 
+              opacity: 1; 
+            }
+          }
         }
       `}</style>
     </div>
