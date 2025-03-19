@@ -76,6 +76,8 @@ async function getProject(slugOrId: string): Promise<Project | null> {
       .select('*')
       .eq('slug', slugOrId)
       .single();
+
+      console.log(data)
       
     // Hvis ikke funnet via slug, sjekk om det er en UUID
     if (error) {

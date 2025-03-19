@@ -54,7 +54,15 @@ const ProsjekterPage = () => {
       } finally {
         setLoading(false);
         // Kort forsinkelse før animasjonene starter, så alt er klart
-        
+        setTimeout(() => {
+          // Animerer alle prosjektkortene ved innlasting
+          const cards = document.querySelectorAll('.project-card');
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('card-visible');
+            }, index * 60); // Staggered effekt basert på kortets indeks
+          });
+        }, 100);
       }
     }
 
@@ -64,28 +72,7 @@ const ProsjekterPage = () => {
     // Aktiverer animasjoner ved innlasting
     document.body.classList.add('projects-page-loaded');
     
-    // Observer for scroll-animasjoner
-    const handleScroll = () => {
-      const cards = document.querySelectorAll('.project-card');
-      
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const isVisible = (rect.top <= window.innerHeight * 0.9);
-        
-        if (isVisible) {
-          setTimeout(() => {
-            card.classList.add('card-visible');
-          }, index * 60); // Raskere staggered effekt basert på kortets indeks
-        }
-      });
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    // Kjør en gang ved oppstart for å animere synlige elementer
-    setTimeout(handleScroll, 100);
-    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.body.classList.remove('projects-page-loaded');
     };
   }, []);

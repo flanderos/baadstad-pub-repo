@@ -37,7 +37,7 @@ const services: Service[] = [
 
 const ServiceSection: React.FC = () => {
   return (
-    <section className="mx-auto px-6 py-20 min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <section className="mx-auto px-6 py-20 min-h-fit bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">

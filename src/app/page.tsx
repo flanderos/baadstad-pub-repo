@@ -105,7 +105,7 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-8 text-gray-200 leading-relaxed max-w-full overflow-hidden text-pretty"
               variants={itemVariants}
             >
               Din nøkkelpartner for perfekte rør og bærekraftige løsninger.
