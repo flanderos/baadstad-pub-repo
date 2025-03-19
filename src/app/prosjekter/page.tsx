@@ -20,6 +20,7 @@ const ProsjekterPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [animationsReady, setAnimationsReady] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -53,8 +54,10 @@ const ProsjekterPage = () => {
         setError(errorMessage);
       } finally {
         setLoading(false);
+        
         // Kort forsinkelse før animasjonene starter, så alt er klart
         setTimeout(() => {
+          setAnimationsReady(true);
           // Animerer alle prosjektkortene ved innlasting
           const cards = document.querySelectorAll('.project-card');
           cards.forEach((card, index) => {
@@ -144,9 +147,11 @@ const ProsjekterPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-12 mt-16 content-ready">
-      <h1 className="text-4xl font-bold mb-6 text-blue-950 animate-header">Våre prosjekter</h1>
-      <div className="w-24 h-1 bg-blue-400 mb-8 animate-line"></div>
-      <p className="text-lg mb-8 animate-text">
+      <h1 className={`text-4xl font-bold mb-6 text-blue-950 ${animationsReady ? 'animate-header' : 'opacity-0'}`}>
+        Våre prosjekter
+      </h1>
+      <div className={`w-24 h-1 bg-blue-400 mb-8 ${animationsReady ? 'animate-line' : 'opacity-0'}`}></div>
+      <p className={`text-lg mb-8 ${animationsReady ? 'animate-text' : 'opacity-0'}`}>
         Her er noen av prosjektene vi har jobbet med.
       </p>
       
@@ -155,7 +160,7 @@ const ProsjekterPage = () => {
           <div 
             key={project.id} 
             className="project-card opacity-0 transform translate-y-8"
-            style={{ transitionDelay: `${index * 0.02}s` }}
+            style={{ animationDelay: `${index * 20}ms` }}
           >
             <ProjectCard project={project} />
           </div>
@@ -166,23 +171,23 @@ const ProsjekterPage = () => {
       <style jsx global>{`
         /* Basis-animasjoner */
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
         
         @keyframes slideDown {
-          from { transform: translateY(-20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+          0% { transform: translateY(-20px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
         }
         
         @keyframes slideUp {
-          from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+          0% { transform: translateY(20px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
         }
         
         @keyframes lineExpand {
-          from { width: 0; }
-          to { width: 6rem; }
+          0% { width: 0; }
+          100% { width: 6rem; }
         }
         
         @keyframes spin {
@@ -209,20 +214,16 @@ const ProsjekterPage = () => {
         
         /* Header animasjon - enda raskere */
         .animate-header {
-          opacity: 0;
           animation: slideDown 0.3s ease-out forwards;
         }
         
         /* Linje animasjon - enda raskere */
         .animate-line {
-          width: 0;
-          opacity: 0;
           animation: lineExpand 0.3s ease-out 0.1s forwards, fadeIn 0.3s ease-out 0.1s forwards;
         }
         
         /* Tekst animasjon - enda raskere */
         .animate-text {
-          opacity: 0;
           animation: fadeIn 0.3s ease-out 0.2s forwards;
         }
         
@@ -235,7 +236,7 @@ const ProsjekterPage = () => {
         .project-card {
           opacity: 0;
           transform: translateY(10px);
-          transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+          transition: opacity 0.25s ease-out, transform 0.25s ease-out;
         }
         
         .card-visible {
@@ -245,7 +246,6 @@ const ProsjekterPage = () => {
         
         /* Forsinkede animasjoner */
         .animate-fade-in-delay {
-          opacity: 0;
           animation: fadeIn 0.8s ease-out 0.2s forwards;
         }
         
