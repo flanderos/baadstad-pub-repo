@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-/* import ProjectCard from '@/app/components/ProjectCard'; */
+ import ProjectCard from '@/app/components/ProjectCard'; 
 import supabase from '@/app/lib/supabase';
 import SectionDivider from'./ui/SectionDivider';
 import Image from 'next/image';
