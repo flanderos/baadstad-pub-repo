@@ -175,7 +175,7 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
               className="object-cover"
             />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black to-transparent" style={{ opacity: 0.6 }} />
           </>
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-blue-800 to-blue-900 flex items-center justify-center">
@@ -190,17 +190,17 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap gap-2 mb-3">
               {projectType && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-600/90 text-white rounded-full">
-                  {projectType}
-                </span>
+                <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-600 text-white rounded-full" style={{ opacity: 0.9 }}>
+                {projectType}
+              </span>
               )}
               {location && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600/90 text-white rounded-full">
+                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600 text-white rounded-full" style={{ opacity: 0.9 }}>
                   {location}
                 </span>
               )}
               {clientType && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600/90 text-white rounded-full">
+                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600 text-white rounded-full" style={{ opacity: 0.9 }}>
                   {clientType}
                 </span>
               )}
@@ -221,7 +221,7 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
       {/* Innholdsområde */}
       <div className="container mx-auto px-4 md:px-8 py-12">
         <div className="max-w-5xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 -mt-16 relative z-10 mb-12">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 -mt-16 relative z-10 mb-12" style={{ backdropFilter: 'blur(12px)' }}>
             {/* Prosjektinformasjon-kort */}
             <div className="flex flex-wrap gap-6 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
               <div className="flex-1 min-w-[200px]">
