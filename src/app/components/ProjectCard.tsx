@@ -51,16 +51,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
               priority={false}
             />
           ) : (
-            // Moderne placeholder-design
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-800 to-blue-900 flex items-center justify-center">
-              <svg className="w-16 h-16 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            // Moderne placeholder-design - Endret fra gradient til solid farge for Safari-kompatibilitet
+            <div className="absolute inset-0 bg-blue-900 flex items-center justify-center">
+              <svg className="w-16 h-16 text-white" style={{ opacity: 0.5 }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
           )}
           
-          {/* Overlegg med gradient effekt */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Overlegg med gradient effekt - Endret til å bruke en flat svart bakgrunn med opacity */}
+          <div 
+            className="absolute inset-0 bg-black transition-opacity duration-300" 
+            style={{ 
+              opacity: 0, 
+              backgroundImage: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)'
+            }}
+          />
+
+          {/* Legger til en hover-effekt med JavaScript i stedet for CSS for å sikre Safari-kompatibilitet */}
+          <style jsx>{`
+            .group:hover .gradient-overlay {
+              opacity: 1 !important;
+            }
+          `}</style>
         </div>
       )}
       
@@ -69,20 +82,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
         {project.tags && project.tags.length > 0 && (
           <div className={`flex flex-wrap gap-2 ${isMinimal ? 'mb-2' : 'mb-3'}`}>
             {project.tags.map((tag, index) => (
-              <span key={index} className={`inline-block px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full ${isMinimal ? 'text-xs' : ''}`}>
+              <span 
+                key={index} 
+                className={`inline-block px-2 py-1 text-xs font-medium text-blue-800 dark:text-blue-200 rounded-full ${isMinimal ? 'text-xs' : ''}`}
+                style={{ 
+                  backgroundColor: 'rgba(219, 234, 254, 1)', 
+                  color: '#1e40af'
+                }}
+              >
                 {tag}
               </span>
             ))}
           </div>
         )}
         
-        <h3 className={`font-bold mb-2 text-blue-950 dark:text-white transition-colors ${isMinimal ? 'text-lg' : 'text-xl'}`}>
+        <h3 className={`font-bold mb-2 transition-colors ${isMinimal ? 'text-lg' : 'text-xl'}`} style={{ color: '#172554' }}>
           {project.title}
         </h3>
         
         {/* Viser beskrivelse bare hvis det ikke er minimal variant */}
         {!isMinimal && (
-          <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
+          <p className="mb-4 line-clamp-2" style={{ color: '#4b5563' }}>
             {project.description}
           </p>
         )}
@@ -90,7 +110,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
         <div className="flex justify-between items-center">
           <Link 
             href={projectUrl}
-            className={`inline-flex items-center px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white font-medium rounded-lg transition-colors duration-200 ${isMinimal ? 'text-sm py-1.5 px-3' : ''}`}
+            className={`inline-flex items-center px-4 py-2 font-medium rounded-lg transition-colors duration-200 ${isMinimal ? 'text-sm py-1.5 px-3' : ''}`}
+            style={{ backgroundColor: '#172554', color: 'white' }}
           >
             {isMinimal ? 'Se mer' : 'Se detaljer'}
             <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -101,7 +122,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
           {/* Ikonknapp bare i standard variant */}
           {!isMinimal && (
             <button 
-              className="p-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-full"
+              style={{ color: '#6b7280' }}
               aria-label="Forhåndsvisning"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -115,6 +137,5 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variant = 'default' 
     </div>
   );
 };
-
 
 export default ProjectCard;
