@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 interface TeamMember {
@@ -20,8 +20,18 @@ const teamMembers: TeamMember[] = [
 ];
 
 const OmOssClient: React.FC = () => {
+  const [isSafari, setIsSafari] = useState(false);
+  
   // Bruk useEffect for å legge til CSS klasser etter at komponenten er montert
   useEffect(() => {
+    // Sjekk om det er Safari
+    const checkSafari = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+    };
+    
+    setIsSafari(checkSafari());
+    
     // Legg til en klasse på body for å trigge animasjoner
     document.body.classList.add('page-loaded');
     
@@ -47,6 +57,7 @@ const OmOssClient: React.FC = () => {
     // Cleanup funksjon
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      document.body.classList.remove('page-loaded');
     };
   }, []);
   
@@ -54,13 +65,20 @@ const OmOssClient: React.FC = () => {
     <div className="container mx-auto px-4 py-16 max-w-7xl mt-16">
       <section className="mb-20 animate-fade-in">
         <div className="flex flex-col items-center mb-16">
-          <h1 className="text-5xl font-bold mb-3 text-center text-blue-950 animate-slide-up">Om Bådstad AS</h1>
-          <div className="animate-line-grow w-24 h-1 bg-blue-400 mb-12"></div>
+          <h1 
+            className="text-5xl font-bold mb-3 text-center animate-slide-up" 
+            style={{ color: '#172554' }}
+          >
+            Om Bådstad AS
+          </h1>
+          <div className="animate-line-grow w-24 h-1 mb-12" style={{ backgroundColor: '#60a5fa' }}></div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl p-1 animate-fade-in-delay-1">
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-lg h-full">
+          {/* Fjernet den blå rammen rundt tekstboksen */}
+          <div className="rounded-xl animate-fade-in-delay-1">
+            <div className="p-8 rounded-lg h-full shadow-lg" 
+                 style={{ backgroundColor: 'white' }}>
               <p className="text-lg mb-6 leading-relaxed animate-fade-in-delay-2">
                 Vi er et team av dedikerte fagfolk som spesialiserer oss på baderom av høyeste kvalitet. 
                 Med vår omfattende kompetanse og lidenskap for håndverk, skaper vi funksjonelle og estetisk 
@@ -78,19 +96,25 @@ const OmOssClient: React.FC = () => {
             </div>
           </div>
           <div className="relative group animate-fade-in-delay-1">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+            <div className="absolute -inset-1 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-300" 
+                 style={{ 
+                   background: isSafari ? '#2563eb' : 'linear-gradient(to right, #2563eb, #0891b2)'
+                 }}></div>
             <div className="relative h-96 lg:h-[28rem] rounded-xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-blue-900/20 z-10"></div>
+              <div className="absolute inset-0 z-10" style={{ backgroundColor: 'rgba(30, 58, 138, 0.2)' }}></div>
               
               <Image 
-                  src="/images/baadstad2.webp" 
-                  alt="Bådstad AS baderom" 
-                  fill 
-                  priority
-                    />
-                
+                src="/images/baadstad2.webp" 
+                alt="Bådstad AS baderom" 
+                fill 
+                priority
+                style={{ objectFit: 'cover' }}
+              />
               
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 z-20 animate-fade-in-delay-4">
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-20 animate-fade-in-delay-4" 
+                   style={{ 
+                     background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)'
+                   }}>
                 <span className="text-white font-medium text-lg block">Kvalitet i hvert detalj</span>
               </div>
             </div>
@@ -100,8 +124,8 @@ const OmOssClient: React.FC = () => {
 
       <section className="animate-on-scroll">
         <div className="flex flex-col items-center mb-16">
-          <h2 className="text-4xl font-bold mb-3 text-center text-blue-950">Vårt Team</h2>
-          <div className="animate-line-grow-scroll w-16 h-1 bg-blue-400 mb-8"></div>
+          <h2 className="text-4xl font-bold mb-3 text-center" style={{ color: '#172554' }}>Vårt Team</h2>
+          <div className="animate-line-grow-scroll w-16 h-1 mb-8" style={{ backgroundColor: '#60a5fa' }}></div>
           <p className="text-xl text-center max-w-2xl mb-12">
             Møt menneskene bak Bådstad AS som gjør drømmebaderommet ditt til virkelighet
           </p>
@@ -110,7 +134,8 @@ const OmOssClient: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {teamMembers.map((member, index) => (
             <div key={index} className={`group animate-on-scroll animate-team-${index}`}>
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-2">
+              <div className="rounded-xl shadow-lg overflow-hidden transition-all duration-300 transform hover:shadow-2xl hover:-translate-y-2"
+                   style={{ backgroundColor: 'white' }}>
                 <div className="aspect-w-4 aspect-h-3 relative h-80 overflow-hidden">
                   {member.image ? (
                     <div className="animate-fade-in-scroll">
@@ -131,8 +156,8 @@ const OmOssClient: React.FC = () => {
                 </div>
                 <div className="p-6 animate-fade-in-scroll-delay">
                   <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
-                  <p className="text-blue-600 font-medium mb-4">{member.title}</p>
-                  <p className="text-gray-600 dark:text-gray-300">{member.description}</p>
+                  <p className="font-medium mb-4" style={{ color: '#2563eb' }}>{member.title}</p>
+                  <p style={{ color: '#4b5563' }}>{member.description}</p>
                 </div>
               </div>
             </div>
@@ -140,16 +165,18 @@ const OmOssClient: React.FC = () => {
         </div>
       </section>
       
-      <section className="mt-20 bg-blue-50 dark:bg-gray-800 rounded-2xl p-8 md:p-12 animate-on-scroll">
+      <section className="mt-20 rounded-2xl p-8 md:p-12 animate-on-scroll shadow-lg"
+               style={{ backgroundColor: '#eff6ff' }}>
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 t text-blue-950">Opplev forskjellen med Bådstad AS</h2>
+          <h2 className="text-3xl font-bold mb-6" style={{ color: '#172554' }}>Opplev forskjellen med Bådstad AS</h2>
           <p className="text-lg mb-8">
             Vi lever etter våre verdier: kvalitet, pålitelighet og kundetilfredshet. Kontakt oss i dag for å diskutere 
             ditt neste baderomsprosjekt.
           </p>
           <a 
             href="/kontakt" 
-            className="inline-block bg-blue-950 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95"
+            className="inline-block font-medium py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95"
+            style={{ backgroundColor: '#172554', color: 'white' }}
           >
             Kontakt Oss
           </a>
@@ -160,23 +187,23 @@ const OmOssClient: React.FC = () => {
       <style jsx global>{`
         /* Basis-animasjoner */
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
         
         @keyframes slideUp {
-          from { transform: translateY(30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+          0% { transform: translateY(30px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
         }
         
         @keyframes scaleIn {
-          from { transform: scale(1.2); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+          0% { transform: scale(1.2); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
         }
         
         @keyframes lineGrow {
-          from { width: 0; }
-          to { width: 100%; }
+          0% { width: 0; }
+          100% { width: 100%; }
         }
         
         /* Animasjonsklasser for page-load */
@@ -265,6 +292,63 @@ const OmOssClient: React.FC = () => {
         
         .animate-team-1 {
           transition-delay: 0.3s;
+        }
+        
+        /* Safari-spesifikke stiler */
+        @supports (-webkit-touch-callout: none) {
+          /* Sikre at bakgrunnen er lys på Safari */
+          body, html {
+            background-color: #ffffff !important;
+          }
+          
+          /* Fikse gradient-problemer */
+          .bg-gradient-to-r {
+            background-image: none !important;
+            background-color: #3b82f6 !important;
+          }
+          
+          /* Fikse farger */
+          .text-blue-950 {
+            color: #172554 !important;
+          }
+          
+          .bg-blue-400 {
+            background-color: #60a5fa !important;
+          }
+          
+          .bg-blue-50 {
+            background-color: #eff6ff !important;
+          }
+          
+          /* Fikse animasjoner for Safari */
+          @keyframes lineGrow {
+            from { width: 0; }
+            to { width: 100%; }
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          @keyframes slideUp {
+            from { 
+              -webkit-transform: translateY(30px); 
+              transform: translateY(30px); 
+              opacity: 0; 
+            }
+            to { 
+              -webkit-transform: translateY(0); 
+              transform: translateY(0); 
+              opacity: 1; 
+            }
+          }
+          
+          /* Sikre at hover-effekter fungerer på Safari */
+          .group:hover .transition-transform {
+            -webkit-transform: scale(1.05);
+            transform: scale(1.05);
+          }
         }
       `}</style>
     </div>

@@ -96,7 +96,7 @@ const Header = () => {
                   height={48} 
                   className="w-12 h-12 rounded-full"
                 />
-                <span className={scrolled ? 'text-blue-600' : 'text-white'}>Bådstad AS</span>
+                <span className={scrolled ? 'text-white' : 'text-white'}>Bådstad AS</span>
               </motion.div>
             </Link>
 
