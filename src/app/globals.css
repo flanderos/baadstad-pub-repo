@@ -5,6 +5,22 @@
   --foreground: #171717;
 }
 
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --background: #ffffff !important;
+    --foreground: #171717 !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #ffffff !important;
+      /* Fortsatt hvit bakgrunn i Safari mørk modus */
+      --foreground: #171717 !important;
+      /* Mørk tekst også i mørk modus */
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

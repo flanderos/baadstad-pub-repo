@@ -21,6 +21,7 @@ const ProsjekterPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [animationsReady, setAnimationsReady] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSafari, setIsSafari] = useState<boolean>(false);
 
   useEffect(() => {
