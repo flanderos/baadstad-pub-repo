@@ -86,47 +86,100 @@ const ImageGalleryModal = ({ images, selectedIndex, onClose }) => {
   
   return (
     <div 
-      className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 md:p-8"
+      style={{ 
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        zIndex: 50,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
+      }}
       onClick={onClose}
     >
       <button 
-        className="absolute top-4 right-4 text-white hover:text-gray-300 z-50"
+        style={{ 
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          color: 'white',
+          zIndex: 50
+        }}
         onClick={onClose}
       >
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
       
       <button 
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-full text-white"
+        style={{ 
+          position: 'absolute',
+          left: '1rem',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          padding: '0.5rem',
+          borderRadius: '9999px',
+          color: 'white'
+        }}
         onClick={handlePrevious}
       >
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
       
-      <div className="relative w-full max-w-4xl h-[80vh] max-h-[80vh] overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div 
+        style={{ 
+          position: 'relative',
+          width: '100%',
+          maxWidth: '56rem',
+          height: '80vh',
+          maxHeight: '80vh',
+          overflow: 'hidden' 
+        }} 
+        onClick={e => e.stopPropagation()}
+      >
         <Image
           src={images[currentIndex].image_url}
           alt={`Bilde ${currentIndex + 1}`}
           fill
           sizes="(max-width: 768px) 100vw, 80vw"
-          className="object-contain"
+          style={{ objectFit: 'contain' }}
           priority
         />
         
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-lg text-sm">
+        <div style={{ 
+          position: 'absolute',
+          bottom: '1rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem'
+        }}>
           {currentIndex + 1} / {images.length}
         </div>
       </div>
       
       <button 
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-full text-white"
+        style={{ 
+          position: 'absolute',
+          right: '1rem',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          padding: '0.5rem',
+          borderRadius: '9999px',
+          color: 'white'
+        }}
         onClick={handleNext}
       >
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
         </svg>
       </button>
@@ -139,6 +192,18 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [currentGalleryType, setCurrentGalleryType] = useState<GalleryImage[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isSafari, setIsSafari] = useState(false);
+  
+  useEffect(() => {
+    // Sjekk om det er Safari
+    const checkSafari = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+    };
+    
+    setIsSafari(checkSafari());
+  }, []);
   
   const contentHtml = project.content || project.description || '';
   const formattedDate = formatDate(project.completion_date || project.created_at);
@@ -150,9 +215,6 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
   // Sjekk om vi har før/etter-bilder
   const showBeforeAfter = galleryImages.before.length > 0 && galleryImages.after.length > 0;
   
-  // Vi vil også samle alle bilder for å kunne bla gjennom alle
- /*  const allImages = [...galleryImages.gallery, ...galleryImages.before, ...galleryImages.after]; */
-  
   // Åpne bildemodalen med spesifikt bilde
   const openGallery = (images: GalleryImage[], index: number) => {
     setCurrentGalleryType(images);
@@ -161,9 +223,9 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
   };
   
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh' }}>
       {/* Hero section med bilde */}
-      <div className="relative w-full h-96">
+      <div style={{ position: 'relative', width: '100%', height: '24rem' }}>
         {project.image_url ? (
           <>
             <Image 
@@ -172,45 +234,97 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
               fill
               sizes="100vw"
               priority
-              className="object-cover"
+              style={{ objectFit: 'cover' }}
             />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black to-transparent" style={{ opacity: 0.6 }} />
+            <div style={{ 
+              position: 'absolute', 
+              inset: 0, 
+              opacity: 0.6,
+              background: 'linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.5), transparent)'
+            }} />
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-r from-blue-800 to-blue-900 flex items-center justify-center">
-            <svg className="w-24 h-24 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            backgroundColor: '#1e40af', 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <svg style={{ width: '6rem', height: '6rem', color: 'rgba(255,255,255,0.4)' }} 
+                 fill="none" 
+                 stroke="currentColor" 
+                 viewBox="0 0 24 24" 
+                 xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
           </div>
         )}
         
         {/* Tittel overlay */}
-        <div className="absolute inset-x-0 bottom-0 container mx-auto px-4 md:px-8 py-8">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-wrap gap-2 mb-3">
+        <div style={{ 
+          position: 'absolute', 
+          bottom: 0, 
+          left: 0, 
+          right: 0, 
+          padding: '2rem 1rem'
+        }}>
+          <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
               {projectType && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-600 text-white rounded-full" style={{ opacity: 0.9 }}>
-                {projectType}
-              </span>
+                <span style={{ 
+                  display: 'inline-block',
+                  padding: '0.25rem 0.75rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  backgroundColor: 'rgba(37, 99, 235, 0.9)',
+                  color: 'white',
+                  borderRadius: '9999px'
+                }}>
+                  {projectType}
+                </span>
               )}
               {location && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600 text-white rounded-full" style={{ opacity: 0.9 }}>
+                <span style={{ 
+                  display: 'inline-block',
+                  padding: '0.25rem 0.75rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  backgroundColor: 'rgba(75, 85, 99, 0.9)',
+                  color: 'white',
+                  borderRadius: '9999px'
+                }}>
                   {location}
                 </span>
               )}
               {clientType && (
-                <span className="inline-block px-3 py-1 text-sm font-medium bg-gray-600 text-white rounded-full" style={{ opacity: 0.9 }}>
+                <span style={{ 
+                  display: 'inline-block',
+                  padding: '0.25rem 0.75rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  backgroundColor: 'rgba(75, 85, 99, 0.9)',
+                  color: 'white',
+                  borderRadius: '9999px'
+                }}>
                   {clientType}
                 </span>
               )}
             </div>
             
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">
+            <h1 style={{ 
+              fontSize: '1.875rem', 
+              fontWeight: 'bold', 
+              color: 'white', 
+              marginBottom: '0.5rem',
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+            }}>
               {project.title}
             </h1>
             {formattedDate && (
-              <p className="text-white/80 text-sm md:text-base mb-4">
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.875rem', marginBottom: '1rem' }}>
                 Ferdigstilt {formattedDate}
               </p>
             )}
@@ -219,64 +333,93 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
       </div>
       
       {/* Innholdsområde */}
-      <div className="container mx-auto px-4 md:px-8 py-12">
-        <div className="max-w-5xl mx-auto">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 -mt-16 relative z-10 mb-12" style={{ backdropFilter: 'blur(12px)' }}>
+      <div style={{ 
+        maxWidth: '1280px', 
+        margin: '0 auto', 
+        padding: '3rem 1rem' 
+      }}>
+        <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '0.75rem', 
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            padding: '1.5rem',
+            marginTop: '-4rem',
+            position: 'relative',
+            zIndex: 10,
+            marginBottom: '3rem'
+          }}>
             {/* Prosjektinformasjon-kort */}
-            <div className="flex flex-wrap gap-6 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex-1 min-w-[200px]">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Type</h3>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{projectType}</p>
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '1.5rem', 
+              marginBottom: '2rem', 
+              paddingBottom: '2rem', 
+              borderBottom: '1px solid rgba(229, 231, 235, 1)'
+            }}>
+              <div style={{ flex: '1', minWidth: '200px' }}>
+                <h3 style={{ fontSize: '0.875rem', fontWeight: '500', color: '#6b7280', marginBottom: '0.25rem' }}>Type</h3>
+                <p style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827' }}>{projectType}</p>
               </div>
               
               {location && (
-                <div className="flex-1 min-w-[200px]">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Sted</h3>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">{location}</p>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: '500', color: '#6b7280', marginBottom: '0.25rem' }}>Sted</h3>
+                  <p style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827' }}>{location}</p>
                 </div>
               )}
               
               {clientType && (
-                <div className="flex-1 min-w-[200px]">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Kunde</h3>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">{clientType}</p>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: '500', color: '#6b7280', marginBottom: '0.25rem' }}>Kunde</h3>
+                  <p style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827' }}>{clientType}</p>
                 </div>
               )}
               
               {formattedDate && (
-                <div className="flex-1 min-w-[200px]">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Ferdigstilt</h3>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">{formattedDate}</p>
+                <div style={{ flex: '1', minWidth: '200px' }}>
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: '500', color: '#6b7280', marginBottom: '0.25rem' }}>Ferdigstilt</h3>
+                  <p style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827' }}>{formattedDate}</p>
                 </div>
               )}
             </div>
             
             {/* Nøkkelelementer */}
             {features.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Nøkkelelementer</h3>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div style={{ marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>Nøkkelelementer</h3>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+                  gap: '0.75rem' 
+                }}>
                   {features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <svg className="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div key={index} style={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <svg 
+                        style={{ width: '1.25rem', height: '1.25rem', color: '#2563eb', marginRight: '0.5rem', marginTop: '0.125rem' }} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                       </svg>
-                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
-                    </li>
+                      <span style={{ color: '#4b5563' }}>{feature}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
             
             {/* Beskrivelse */}
-            <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-              <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Om prosjektet</h3>
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>Om prosjektet</h3>
               {contentHtml.startsWith('<') ? (
                 <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
               ) : (
-                <div className="space-y-6">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   {contentHtml.split('\n\n').map((paragraph, idx) => (
-                    <p key={idx} className="text-gray-700 dark:text-gray-300">
+                    <p key={idx} style={{ color: '#4b5563' }}>
                       {paragraph}
                     </p>
                   ))}
@@ -287,14 +430,31 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           
           {/* Bildegalleri - vises kun hvis vi har galleribilder */}
           {galleryImages.gallery.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mb-12">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Bildegalleri</h3>
+            <div style={{ 
+              backgroundColor: 'white', 
+              borderRadius: '0.75rem', 
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              padding: '1.5rem',
+              marginBottom: '3rem'
+            }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1.5rem' }}>Bildegalleri</h3>
               
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', 
+                gap: '1rem' 
+              }}>
                 {galleryImages.gallery.map((image, index) => (
                   <div 
                     key={`gallery-${index}`} 
-                    className="aspect-square relative rounded-lg overflow-hidden shadow-md cursor-pointer group"
+                    style={{ 
+                      aspectRatio: '1/1',
+                      position: 'relative',
+                      borderRadius: '0.5rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                      cursor: 'pointer'
+                    }}
                     onClick={() => openGallery(galleryImages.gallery, index)}
                   >
                     <Image 
@@ -302,10 +462,23 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
                       alt={`Prosjektbilde ${index + 1}`} 
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      style={{ 
+                        objectFit: 'cover',
+                        transition: 'transform 0.3s'
+                      }}
+                      className="gallery-image"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                      <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div style={{ 
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundColor: 'rgba(0, 0, 0, 0)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0,
+                      transition: 'all 0.3s',
+                    }} className="gallery-overlay">
+                      <svg style={{ width: '2.5rem', height: '2.5rem', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                     </div>
@@ -317,18 +490,36 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           
           {/* Før og etter bildegalleri - vises kun hvis vi har begge typer bilder */}
           {showBeforeAfter && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mb-12">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Før og etter</h3>
+            <div style={{ 
+              backgroundColor: 'white', 
+              borderRadius: '0.75rem', 
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              padding: '1.5rem',
+              marginBottom: '3rem'
+            }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1.5rem' }}>Før og etter</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+                gap: '1.5rem' 
+              }}>
                 {/* Før-bilder */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Før</h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>Før</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {galleryImages.before.map((image, index) => (
                       <div 
                         key={`before-${index}`} 
-                        className="relative h-64 w-full rounded-lg overflow-hidden shadow-md cursor-pointer group"
+                        style={{ 
+                          position: 'relative',
+                          height: '16rem',
+                          width: '100%',
+                          borderRadius: '0.5rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                          cursor: 'pointer'
+                        }}
                         onClick={() => openGallery(galleryImages.before, index)}
                       >
                         <Image 
@@ -336,10 +527,23 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
                           alt={`Før-bilde ${index + 1}`} 
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          style={{ 
+                            objectFit: 'cover',
+                            transition: 'transform 0.3s'
+                          }}
+                          className="gallery-image"
                         />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div style={{ 
+                          position: 'absolute',
+                          inset: 0,
+                          backgroundColor: 'rgba(0, 0, 0, 0)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          opacity: 0,
+                          transition: 'all 0.3s',
+                        }} className="gallery-overlay">
+                          <svg style={{ width: '2.5rem', height: '2.5rem', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                           </svg>
                         </div>
@@ -350,12 +554,20 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
                 
                 {/* Etter-bilder */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Etter</h4>
-                  <div className="grid grid-cols-1 gap-4">
+                  <h4 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '1rem' }}>Etter</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {galleryImages.after.map((image, index) => (
                       <div 
                         key={`after-${index}`} 
-                        className="relative h-64 w-full rounded-lg overflow-hidden shadow-md cursor-pointer group"
+                        style={{ 
+                          position: 'relative',
+                          height: '16rem',
+                          width: '100%',
+                          borderRadius: '0.5rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                          cursor: 'pointer'
+                        }}
                         onClick={() => openGallery(galleryImages.after, index)}
                       >
                         <Image 
@@ -363,10 +575,23 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
                           alt={`Etter-bilde ${index + 1}`} 
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          style={{ 
+                            objectFit: 'cover',
+                            transition: 'transform 0.3s'
+                          }}
+                          className="gallery-image"
                         />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div style={{ 
+                          position: 'absolute',
+                          inset: 0,
+                          backgroundColor: 'rgba(0, 0, 0, 0)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          opacity: 0,
+                          transition: 'all 0.3s',
+                        }} className="gallery-overlay">
+                          <svg style={{ width: '2.5rem', height: '2.5rem', color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                           </svg>
                         </div>
@@ -379,24 +604,50 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           )}
           
           {/* CTA Boks */}
-          <div className="bg-blue-950 dark:bg-blue-700 rounded-xl shadow-lg p-6 md:p-8 text-white mb-12">
-            <div className="flex flex-col md:flex-row md:items-center justify-between">
-              <div className="mb-6 md:mb-0">
-                <h3 className="text-2xl font-bold mb-2">Ønsker du et lignende prosjekt?</h3>
-                <p className="text-blue-100">Ta kontakt med oss for en uforpliktende befaring og tilbud.</p>
+          <div style={{ 
+            backgroundColor: '#172554', 
+            borderRadius: '0.75rem', 
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            padding: '1.5rem',
+            marginBottom: '3rem',
+            color: 'white'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Ønsker du et lignende prosjekt?</h3>
+                <p style={{ color: '#93c5fd' }}>Ta kontakt med oss for en uforpliktende befaring og tilbud.</p>
               </div>
-              <div className="flex flex-wrap gap-4">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                 <a 
                   href="/kontakt" 
-                  className="inline-block px-6 py-3 bg-white text-blue-950 font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-md"
+                  style={{ 
+                    display: 'inline-block',
+                    padding: '0.75rem 1.5rem',
+                    backgroundColor: 'white',
+                    color: '#172554',
+                    fontWeight: 'bold',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                    textDecoration: 'none'
+                  }}
                 >
                   Kontakt oss
                 </a>
                 <a 
                   href="tel:+4712345678" 
-                  className="inline-flex items-center px-6 py-3 bg-white hover:bg-blue-50 text-blue-950 font-bold rounded-lg transition-colors shadow-md"
+                  style={{ 
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '0.75rem 1.5rem',
+                    backgroundColor: 'white',
+                    color: '#172554',
+                    fontWeight: 'bold',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                    textDecoration: 'none'
+                  }}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg style={{ width: '1.25rem', height: '1.25rem', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   Ring oss
@@ -406,12 +657,22 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           </div>
           
           {/* Navigasjon */}
-          <div className="flex justify-between items-center">
+          <div>
             <Link
               href="/prosjekter" 
-              className="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium rounded-lg transition-colors duration-200"
+              style={{ 
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#f3f4f6',
+                color: '#111827',
+                fontWeight: '500',
+                borderRadius: '0.5rem',
+                textDecoration: 'none',
+                transition: 'background-color 0.2s'
+              }}
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg style={{ width: '1.25rem', height: '1.25rem', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Se alle prosjekter
@@ -419,7 +680,7 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           </div>
         </div>
       </div>
-      
+    
       {/* Bildegallerimoda - vises når brukeren klikker på et bilde */}
       {galleryOpen && (
         <ImageGalleryModal 
@@ -428,6 +689,64 @@ export default function ClientProjectDetails({ project, galleryImages }: ClientP
           onClose={() => setGalleryOpen(false)}
         />
       )}
+      
+      {/* CSS for hover-effekter på galleribilder */}
+      <style jsx global>{`
+        /* Bruk standard CSS-klasser for hover-effekter som er mer kompatible med Safari */
+        .gallery-image:hover {
+          transform: scale(1.05);
+        }
+        
+        /* Gjelder bilder når brukeren hovrer over container */
+        div:hover .gallery-overlay {
+          background-color: rgba(0, 0, 0, 0.3) !important;
+          opacity: 1 !important;
+        }
+        
+        /* Safari-spesifikke stiler */
+        @supports (-webkit-touch-callout: none) {
+          /* Sikre at bakgrunnen er hvit på Safari */
+          html, body {
+            background-color: #f9fafb !important;
+          }
+          
+          /* Fjern dark mode for Safari */
+          .dark {
+            color-scheme: light !important;
+          }
+          
+          /* Forbedre gradient rendering */
+          .bg-gradient-to-t {
+            background: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.5), transparent) !important;
+          }
+          
+          /* Forbedre rendering av knapper */
+          .bg-blue-950, .dark\:bg-blue-700 {
+            background-color: #172554 !important;
+          }
+          
+          /* Sikre at tekst er leselig */
+          .text-white, .dark\:text-white {
+            color: #ffffff !important;
+          }
+          
+          .text-gray-800, .dark\:text-gray-700 {
+            color: #111827 !important;
+          }
+        }
+        
+        @media (hover: none) {
+          /* For enheter uten hover-støtte (touch-enheter) */
+          .gallery-image {
+            transform: scale(1) !important;
+          }
+          
+          .gallery-overlay {
+            background-color: rgba(0, 0, 0, 0.15) !important;
+            opacity: 1 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
