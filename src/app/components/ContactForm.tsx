@@ -23,6 +23,17 @@ const ContactForm: React.FC = () => {
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isSafari, setIsSafari] = useState<boolean>(false);
+
+  // Sjekk om det er Safari i useEffect
+  useState(() => {
+    const checkSafari = () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+    };
+    
+    setIsSafari(checkSafari());
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -88,6 +99,11 @@ const ContactForm: React.FC = () => {
     visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 200, damping: 15 } }
   };
 
+  // Definisjon av gradient som bakgrunnsfarge for Safari-kompatibilitet
+  const buttonStyle = isSafari 
+    ? { background: '#3b82f6', color: 'white' } 
+    : { background: 'linear-gradient(to right, #60a5fa, #2563eb)', color: 'white' };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -102,9 +118,10 @@ const ContactForm: React.FC = () => {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg flex items-center"
+              className="border rounded-lg flex items-center px-4 py-3"
+              style={{ backgroundColor: '#ecfdf5', borderColor: '#a7f3d0', color: '#065f46' }}
             >
-              <Check className="w-5 h-5 mr-2 text-emerald-500" />
+              <Check className="w-5 h-5 mr-2" style={{ color: '#10b981' }} />
               <span>Takk for din henvendelse! Vi vil kontakte deg så snart som mulig.</span>
             </motion.div>
           )}
@@ -115,9 +132,10 @@ const ContactForm: React.FC = () => {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center"
+              className="border rounded-lg flex items-center px-4 py-3"
+              style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#991b1b' }}
             >
-              <AlertCircle className="w-5 h-5 mr-2 text-red-500" />
+              <AlertCircle className="w-5 h-5 mr-2" style={{ color: '#ef4444' }} />
               <span>{submitError}</span>
             </motion.div>
           )}
@@ -125,7 +143,7 @@ const ContactForm: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="name" className="block mb-1.5 font-medium text-gray-700">Navn</label>
+            <label htmlFor="name" className="block mb-1.5 font-medium" style={{ color: '#374151' }}>Navn</label>
             <motion.div
               variants={inputVariants}
               animate={focusedField === 'name' ? 'focused' : 'default'}
@@ -141,13 +159,20 @@ const ContactForm: React.FC = () => {
                 onBlur={handleBlur}
                 required
                 placeholder="Ditt navn"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 bg-white bg-opacity-90 transition-colors"
+                className="w-full px-4 py-3 rounded-lg focus:outline-none transition-colors"
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: '#e5e7eb',
+                  borderRadius: '0.5rem'
+                }}
               />
             </motion.div>
           </div>
 
           <div>
-            <label htmlFor="email" className="block mb-1.5 font-medium text-gray-700">E-post</label>
+            <label htmlFor="email" className="block mb-1.5 font-medium" style={{ color: '#374151' }}>E-post</label>
             <motion.div
               variants={inputVariants}
               animate={focusedField === 'email' ? 'focused' : 'default'}
@@ -163,14 +188,21 @@ const ContactForm: React.FC = () => {
                 onBlur={handleBlur}
                 required
                 placeholder="din.epost@eksempel.no"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 bg-white bg-opacity-90 transition-colors"
+                className="w-full px-4 py-3 rounded-lg focus:outline-none transition-colors"
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: '#e5e7eb',
+                  borderRadius: '0.5rem'
+                }}
               />
             </motion.div>
           </div>
         </div>
 
         <div>
-          <label htmlFor="subject" className="block mb-1.5 font-medium text-gray-700">Emne</label>
+          <label htmlFor="subject" className="block mb-1.5 font-medium" style={{ color: '#374151' }}>Emne</label>
           <motion.div
             variants={inputVariants}
             animate={focusedField === 'subject' ? 'focused' : 'default'}
@@ -186,13 +218,20 @@ const ContactForm: React.FC = () => {
               onBlur={handleBlur}
               required
               placeholder="Hva gjelder din henvendelse?"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 bg-white bg-opacity-90 transition-colors"
+              className="w-full px-4 py-3 rounded-lg focus:outline-none transition-colors"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: '#e5e7eb',
+                borderRadius: '0.5rem'
+              }}
             />
           </motion.div>
         </div>
 
         <div>
-          <label htmlFor="message" className="block mb-1.5 font-medium text-gray-700">Melding</label>
+          <label htmlFor="message" className="block mb-1.5 font-medium" style={{ color: '#374151' }}>Melding</label>
           <motion.div
             variants={inputVariants}
             animate={focusedField === 'message' ? 'focused' : 'default'}
@@ -208,7 +247,14 @@ const ContactForm: React.FC = () => {
               required
               rows={5}
               placeholder="Skriv din melding her..."
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 bg-white bg-opacity-90 transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-lg focus:outline-none transition-colors resize-none"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: '#e5e7eb',
+                borderRadius: '0.5rem'
+              }}
             ></textarea>
           </motion.div>
         </div>
@@ -219,7 +265,8 @@ const ContactForm: React.FC = () => {
             disabled={isSubmitting}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-70 transition-all flex items-center justify-center min-w-[140px]"
+            className="font-medium py-3 px-6 rounded-lg focus:outline-none disabled:opacity-70 transition-all flex items-center justify-center min-w-[140px]"
+            style={buttonStyle}
           >
             {isSubmitting ? (
               <>
@@ -235,6 +282,31 @@ const ContactForm: React.FC = () => {
           </motion.button>
         </div>
       </form>
+
+      {/* Safari-spesifikke stiler */}
+      <style jsx global>{`
+        @supports (-webkit-touch-callout: none) {
+          /* Knapper og bakgrunner */
+          .bg-gradient-to-r {
+            background-image: none !important;
+            background-color: #3b82f6 !important;
+          }
+          
+          /* Alertmeldinger */
+          .bg-emerald-50 {
+            background-color: #ecfdf5 !important;
+          }
+          
+          .bg-red-50 {
+            background-color: #fef2f2 !important;
+          }
+          
+          /* Fokus-stiler */
+          input:focus, textarea:focus {
+            border-color: #6366f1 !important;
+          }
+        }
+      `}</style>
     </motion.div>
   );
 };
