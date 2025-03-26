@@ -49,7 +49,6 @@ const Footer: React.FC = () => {
 
   // Navigasjonslenker
   const navLinks: NavLink[] = [
-    { name: 'Tjenester', path: '/' },
     { name: 'Prosjekter', path: '/prosjekter' },
     { name: 'Om oss', path: '/om-oss' },
     { name: 'Kontakt', path: '/kontakt' },
@@ -81,22 +80,6 @@ const Footer: React.FC = () => {
 
   ];
 
-  // Nyhetsbrev form håndtering
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail('');
-      
-      // Reset subscription status after 5 seconds
-      setTimeout(() => {
-        setSubscribed(false);
-      }, 5000);
-    }
-  };
 
   // Animation variants
   const footerItemVariants = {
@@ -244,56 +227,7 @@ const Footer: React.FC = () => {
           </motion.div>
 
           {/* Newsletter subscription */}
-          <motion.div 
-            className="md:col-span-3"
-            initial="hidden"
-            whileInView="visible"
-            variants={footerItemVariants}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-lg font-semibold mb-4 text-white relative inline-block">
-              Nyhetsbrev
-              <motion.span 
-                className="absolute -bottom-1 left-0 h-0.5 bg-blue-500"
-                initial={{ width: 0 }}
-                whileInView={{ width: '100%' }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                viewport={{ once: true }}
-              />
-            </h3>
-            <p className="text-gray-400 mb-4">
-              Få de siste oppdateringene på e-post.
-            </p>
-            
-            {subscribed ? (
-              <motion.div 
-                className="bg-green-900/30 border border-green-600 p-3 rounded-lg text-sm text-green-400"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                Takk for påmeldingen! Du vil nå motta vårt nyhetsbrev.
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Din e-postadresse"
-                  className="w-full bg-gray-800/50 border border-gray-700 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-500"
-                  required
-                />
-                <motion.button
-                  type="submit"
-                  className="absolute right-1.5 top-1.5 bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md transition-colors duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Meld på
-                </motion.button>
-              </form>
-            )}
-          </motion.div>
+          
         </div>
 
         {/* Bottom bar with background animation */}
@@ -328,7 +262,7 @@ const Footer: React.FC = () => {
           </div>
           
         </motion.div>
-        <p className="mt-2 text-gray-400 flex flex-row justify-end">
+        <p className="mt-2 text-gray-400 flex flex-row justify-center">
               Utviklet og levert av <a href="https://webfront.no" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors duration-300 font-medium z-50 ml-1.5">WebFront</a>
           </p>
       </div>
