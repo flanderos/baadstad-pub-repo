@@ -145,14 +145,17 @@ const ProsjekterPage = () => {
   // Viser melding hvis ingen prosjekter
   if (!projects || projects.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold mb-6" style={{ color: '#1e3a8a', opacity: 1 }}>
+      <div className="container mx-auto px-4 py-20 text-center mt-7">
+        <h1 className="text-4xl font-extrabold mb-4 text-blue-900">
           Våre prosjekter
         </h1>
-        <p>Ingen prosjekter funnet.</p>
+        <p className="text-lg text-gray-600">
+          Vi har foreløpig ingen prosjekter å vise – men det kommer snart!
+        </p>
       </div>
     );
   }
+  
 
   // Formater prosjektdata for visning, legger til slug hvis det mangler
   const formattedProjects = projects.map(project => ({
