@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import MinimalisticLine from "./ui/MinimalisticLine";
+import Link from 'next/link';
 
 const AboutSection = () => {
   return (
@@ -83,6 +84,7 @@ const AboutSection = () => {
         </div>
 
         {/* Knapp med kul animasjon */}
+        <Link href="/kontakt">
         <motion.button 
           className="relative mt-12 px-8 py-4 bg-blue-950 text-white font-semibold rounded-lg shadow-lg overflow-hidden group hover:cursor-pointer"
           whileHover="hover"
@@ -110,6 +112,7 @@ const AboutSection = () => {
             </motion.div>
           </motion.span>
           
+          
           <motion.div
             className="absolute left-0 bottom-0 h-1 bg-blue-500"
             initial={{ width: 0 }}
@@ -122,6 +125,7 @@ const AboutSection = () => {
               }
             }}
           />
+          
           
           <motion.div
             className="absolute left-0 top-0 bottom-0 bg-blue-800 origin-left"
@@ -137,6 +141,7 @@ const AboutSection = () => {
             style={{ zIndex: 1 }}
           />
         </motion.button>
+        </Link>
       </section>
       <MinimalisticLine />
     </div>
