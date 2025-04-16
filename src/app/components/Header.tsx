@@ -184,8 +184,8 @@ const Header = () => {
                 ))}
                 <div className="mt-8 pt-6 border-t border-gray-700">
                   <p className="text-gray-400 mb-4">Kontakt oss</p>
-                  <p className="text-white mb-2">info@dittfirma.no</p>
-                  <p className="text-white">+47 123 45 678</p>
+                  <p className="text-white mb-2">post@baadstad.no</p>
+                  <p className="text-white">+47 91 14 49 19</p>
                 </div>
               </nav>
             </motion.div>
